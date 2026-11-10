@@ -1,0 +1,12 @@
+{
+  "jack": {
+    "street": "123 Street St.",
+    "city": "Sometown",
+    "zipcode": "43215"
+  },
+  "jill": {
+    "street": "234 Other St",
+    "city": "Townville",
+    "zipcode": "32145"
+  }
+}

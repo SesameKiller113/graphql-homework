@@ -1,0 +1,39 @@
+{
+  "name": "interview_homework",
+  "version": "1.0.0",
+  "scripts": {
+    "dev": "ts-node src/server.ts",
+    "lint": "eslint . --ext .ts",
+    "test": "DISABLE_DYNAMO=true npx jest --config=./jest.config.ts  --watchAll=false --ci"
+  },
+  "dependencies": {
+    "@envelop/core": "^5.3.0",
+    "@envelop/parser-cache": "^9.0.0",
+    "@envelop/response-cache": "^8.0.0",
+    "@envelop/validation-cache": "^9.0.0",
+    "@graphql-tools/executor-http": "^1.1.6",
+    "@graphql-tools/load-files": "^7.0.1",
+    "@graphql-tools/merge": "^9.0.24",
+    "@graphql-tools/schema": "^10.0.23",
+    "@graphql-tools/utils": "^10.0.8",
+    "graphql": "^16.11.0",
+    "graphql-yoga": "^5.13.4",
+    "uuid": "^11.1.0",
+    "winston": "^3.17.0"
+  },
+  "devDependencies": {
+    "@types/jest": "^30.0.0",
+    "@types/node": "^22.15.17",
+    "@typescript-eslint/eslint-plugin": "8.41.0",
+    "@typescript-eslint/parser": "8.41.0",
+    "eslint": "8.57.0",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.8.3",
+    "jest": "^30.2.0",
+    "ts-jest": "^29.4.5"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": ""
+}
