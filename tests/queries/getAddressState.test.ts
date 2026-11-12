@@ -1,7 +1,9 @@
 import { parse } from 'graphql';
 import { executor } from '../exectuor';
+import { addressStore } from '../../src/schema/address/store';
+import { Addresses } from '../../src/schema/address/types';
 
-jest.mock('../../data/addresses.json', () => ({
+const addresses: Addresses = {
   withState: {
     street: '123 Test St.',
     city: 'Testville',
@@ -13,7 +15,7 @@ jest.mock('../../data/addresses.json', () => ({
     city: 'Testville',
     zipcode: '90001',
   },
-}));
+};
 
 const query = parse(`
   query GetAddress($username: String!) {
@@ -27,6 +29,12 @@ const query = parse(`
 `);
 
 describe('address state', () => {
+  beforeEach(() => {
+    jest.spyOn(addressStore, 'get').mockImplementation(async username => addresses[username] ?? null);
+  });
+
+  afterEach(() => jest.restoreAllMocks());
+
   test('returns state when the address has one', async () => {
     const result = await executor({ document: query, variables: { username: 'withState' } });
 

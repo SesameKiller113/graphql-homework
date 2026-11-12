@@ -12,3 +12,8 @@ export type Addresses = {
 export type Args = {
   username: string;
 };
+
+export type CreateAddressArgs = {
+  username: string;
+  address: Address;
+};
