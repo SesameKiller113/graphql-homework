@@ -21,6 +21,7 @@ describe('getAddress', () => {
     });
 
     expect(result).toEqual({
+      metadata: { requestId: expect.any(String) },
       "data": {
         "address": {
           street: '123 Street St.',

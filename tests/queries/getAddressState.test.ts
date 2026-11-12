@@ -39,6 +39,7 @@ describe('address state', () => {
     const result = await executor({ document: query, variables: { username: 'withState' } });
 
     expect(result).toEqual({
+      metadata: { requestId: expect.any(String) },
       data: {
         address: {
           street: '123 Test St.',
@@ -54,6 +55,7 @@ describe('address state', () => {
     const result = await executor({ document: query, variables: { username: 'withoutState' } });
 
     expect(result).toEqual({
+      metadata: { requestId: expect.any(String) },
       data: {
         address: {
           street: '123 Test St.',

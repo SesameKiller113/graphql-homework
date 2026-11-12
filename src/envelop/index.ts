@@ -6,6 +6,7 @@ import { useValidationCache } from '@envelop/validation-cache';
 import { buildHeaders } from './buildHeaders';
 import { useLogger } from './useLogger';
 import { useClientHeader } from './useClientHeader';
+import { useResponseMetadata } from './useResponseMetadata';
 import { ContextType } from '../types';
 
 const plugins: Plugin<ContextType>[] = [
@@ -15,6 +16,7 @@ const plugins: Plugin<ContextType>[] = [
   useLogger(),
   useParserCache() as Plugin<ContextType>,
   useValidationCache() as Plugin<ContextType>,
+  useResponseMetadata(),
 ];
 
 export default plugins;

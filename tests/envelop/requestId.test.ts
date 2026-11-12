@@ -49,7 +49,11 @@ describe('requestId and client logging', () => {
   afterEach(() => jest.restoreAllMocks());
 
   test('sets the ID before resolvers run and includes it in query and mutation logs', async () => {
-    expect(await send(yoga, query)).toEqual({ data: { address: { city: 'Boston' } } });
+    const queryResponse = await send(yoga, query);
+    expect(queryResponse).toEqual({
+      data: { address: { city: 'Boston' } },
+      metadata: { requestId: contexts[0].requestId },
+    });
     const queryId = contexts[0].requestId;
     expect(queryId).toEqual(expect.any(String));
     expect(queryId).not.toBe('');
@@ -58,7 +62,11 @@ describe('requestId and client logging', () => {
     expect(entries.every(entry => entry.requestId === queryId && entry.client === 'test')).toBe(true);
     entries = [];
 
-    expect(await send(yoga, mutation)).toEqual({ data: { createAddress: { city: 'Boston' } } });
+    const mutationResponse = await send(yoga, mutation);
+    expect(mutationResponse).toEqual({
+      data: { createAddress: { city: 'Boston' } },
+      metadata: { requestId: contexts[1].requestId },
+    });
     const mutationId = contexts[1].requestId;
     expect(mutationId).not.toBe(queryId);
     expect(contexts[1].logger.requestId).toBe(mutationId);
@@ -67,11 +75,13 @@ describe('requestId and client logging', () => {
   });
 
   test('keeps IDs and clients separate when the same query is repeated', async () => {
-    await send(yoga, query, 'interview');
+    const firstResponse = await send(yoga, query, 'interview');
     const firstLogs = entries.slice();
-    await send(yoga, query, 'strata');
+    const secondResponse = await send(yoga, query, 'strata');
     const secondLogs = entries.slice(firstLogs.length);
     expect(contexts[1].requestId).not.toBe(contexts[0].requestId);
+    expect(firstResponse.metadata.requestId).toBe(contexts[0].requestId);
+    expect(secondResponse.metadata.requestId).toBe(contexts[1].requestId);
     expect(contexts[1].logger).not.toBe(contexts[0].logger);
     expect(firstLogs).toHaveLength(2);
     expect(secondLogs).toHaveLength(2);
@@ -82,7 +92,11 @@ describe('requestId and client logging', () => {
   test('includes the request ID when an address is not found', async () => {
     jest.mocked(addressStore.get).mockResolvedValue(null);
     const result = await send(yoga, query);
-    expect(result).toMatchObject({ errors: [{ message: 'No address found in getAddress resolver' }] });
+    expect(result).toMatchObject({
+      data: { address: null },
+      errors: [{ message: 'No address found in getAddress resolver' }],
+      metadata: { requestId: contexts[0].requestId },
+    });
     expect(entries).toHaveLength(2);
     expect(entries[1].level).toBe('error');
     expect(contexts[0].requestId).toEqual(expect.any(String));
