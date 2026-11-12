@@ -8,6 +8,7 @@ export const useLogger = (): Plugin<ContextType> => {
       if (!context) return;
       const logger = new Logger();
       logger.setRequestId(context.requestId);
+      logger.setClient(context.request.headers.get('client')?.trim() || null);
       extendContext({ logger: logger });
     },
   };
