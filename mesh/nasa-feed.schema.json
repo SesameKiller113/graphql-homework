@@ -1,0 +1,18 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "NasaFeedResponse",
+  "type": "object",
+  "required": [
+    "element_count",
+    "near_earth_objects"
+  ],
+  "properties": {
+    "element_count": {
+      "type": "integer"
+    },
+    "near_earth_objects": {
+      "type": "object",
+      "additionalProperties": true
+    }
+  }
+}
