@@ -1,4 +1,4 @@
-import type { Plugin } from '@envelop/core';
+import type { Plugin } from 'graphql-yoga';
 import { Logger } from '../logger';
 import { ContextType } from '../types';
 
