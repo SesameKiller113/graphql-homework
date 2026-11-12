@@ -1,3 +1,7 @@
 type Query {
   address(username: String!): Address
 }
+
+type Mutation {
+  createAddress(username: String!, address: AddressInput!): Address
+}
