@@ -10,6 +10,7 @@ const existingAddresses = {
   jack: { street: '123 Street St.', city: 'Sometown', zipcode: '43215' },
 };
 const address: Address = { street: '1 Test St.', city: 'Boston', state: 'MA', zipcode: '02101' };
+const metadata = { requestId: expect.any(String) };
 const mutation = parse(`
   mutation CreateAddress($username: String!, $address: AddressInput!) {
     createAddress(username: $username, address: $address) {
@@ -45,9 +46,10 @@ describe('createAddress', () => {
   });
 
   test('saves a new address, preserves existing records and allows querying it', async () => {
-    expect(await create('tom')).toEqual({ data: { createAddress: address } });
+    expect(await create('tom')).toEqual({ data: { createAddress: address }, metadata });
     expect(JSON.parse(await readFile(filePath, 'utf8'))).toEqual({ ...existingAddresses, tom: address });
     expect(await executor({ document: query, variables: { username: 'tom' } })).toEqual({
+      metadata,
       data: { address },
     });
   });
@@ -59,12 +61,12 @@ describe('createAddress', () => {
       errors: [{ message: 'An address already exists for this username' }],
     });
     expect(await readFile(filePath, 'utf8')).toBe(before);
-    expect(await create('tom')).toEqual({ data: { createAddress: address } });
+    expect(await create('tom')).toEqual({ data: { createAddress: address }, metadata });
   });
 
   test('accepts an address without state', async () => {
     const input = { street: '1 Test St.', city: 'Boston', zipcode: '02101' };
-    expect(await create('tom', input)).toEqual({ data: { createAddress: { ...input, state: null } } });
+    expect(await create('tom', input)).toEqual({ data: { createAddress: { ...input, state: null } }, metadata });
     expect(JSON.parse(await readFile(filePath, 'utf8'))).toEqual({ ...existingAddresses, tom: input });
   });
 
@@ -88,7 +90,7 @@ describe('createAddress', () => {
   test('allows only one concurrent create for the same username', async () => {
     const results = await Promise.all([create('tom'), create('tom')]);
     expect(results).toEqual(expect.arrayContaining([
-      { data: { createAddress: address } },
+      { data: { createAddress: address }, metadata },
       expect.objectContaining({ errors: expect.any(Array), data: { createAddress: null } }),
     ]));
     expect(JSON.parse(await readFile(filePath, 'utf8'))).toEqual({ ...existingAddresses, tom: address });
