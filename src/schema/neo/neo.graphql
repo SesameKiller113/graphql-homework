@@ -1,0 +1,19 @@
+extend type Query {
+  nearEarthObjects(startDate: String!, endDate: String!): NearEarthObjectFeed
+}
+
+type NearEarthObjectFeed {
+  elementCount: Int
+  objects: [NearEarthObject]
+}
+
+type NearEarthObject {
+  id: String
+  name: String
+  isPotentiallyHazardousAsteroid: Boolean
+  estimatedDiameterMinKm: Float
+  estimatedDiameterMaxKm: Float
+  closeApproachDate: String
+  relativeVelocityKph: String
+  missDistanceKm: String
+}
