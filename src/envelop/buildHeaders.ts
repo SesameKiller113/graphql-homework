@@ -1,4 +1,4 @@
-import type { Plugin } from '@envelop/core';
+import type { Plugin } from 'graphql-yoga';
 import { v4 as uuid } from 'uuid';
 import { ContextType } from '../types';
 
