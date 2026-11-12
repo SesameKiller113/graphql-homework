@@ -16,14 +16,14 @@ export class Logger {
   }
 
   info(message: string, meta?: object) {
-    this.winston.info(message, meta);
+    this.winston.info(message, { ...meta, requestId: this.requestId });
   }
 
   error(message: string, meta?: object) {
-    this.winston.error(message, meta);
+    this.winston.error(message, { ...meta, requestId: this.requestId });
   }
 
   warn(message: string, meta?: object) {
-    this.winston.warn(message, meta);
+    this.winston.warn(message, { ...meta, requestId: this.requestId });
   }
 }

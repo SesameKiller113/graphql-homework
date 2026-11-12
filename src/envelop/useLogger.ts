@@ -4,7 +4,8 @@ import { ContextType } from '../types';
 
 export const useLogger = (): Plugin<ContextType> => {
   return {
-    onParse({ context, extendContext }) {
+    onEnveloped({ context, extendContext }) {
+      if (!context) return;
       const logger = new Logger();
       logger.setRequestId(context.requestId);
       extendContext({ logger: logger });
